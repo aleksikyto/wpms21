@@ -6,12 +6,14 @@ import {uploadsUrl} from '../utils/variables';
 const ListItem = ({singleMedia}) => {
   return (
     <TouchableOpacity style={styles.box}>
-      <Image
-        style={{width: '100%', height: 'auto', flex: 1}}
-        source={{
-          uri: uploadsUrl + singleMedia.filename,
-        }}
-      />
+      <View style={{flex: 1}}>
+        <Image
+          style={{flex: 1}}
+          source={{
+            uri: uploadsUrl + singleMedia.thumbnails?.w160,
+          }}
+        />
+      </View>
       <View style={styles.text}>
         <Text style={styles.title}>{singleMedia.title}</Text>
         <Text>{singleMedia.description}</Text>
