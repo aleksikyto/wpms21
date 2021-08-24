@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {FlatList} from 'react-native';
+import {baseUrl} from '../utils/variables';
 import ListItem from './ListItem';
 
 const List = (props) => {
   const [mediaArray, setMediaArray] = useState([]);
-  const url =
-    'https://raw.githubusercontent.com/mattpe/wbma/master/docs/assets/test.json';
+  const url = baseUrl + 'media';
 
   useEffect(() => {
     const loadMedia = async () => {
@@ -14,13 +14,13 @@ const List = (props) => {
         const json = await response.json();
         setMediaArray(json);
       } catch (e) {
-        console.log('useEffect catch', e.message);
+        console.log(e.message());
       }
     };
     loadMedia();
   }, []);
 
-  console.log('list function, mediaArray', mediaArray);
+  console.log('List rivi 15', mediaArray);
   return (
     <FlatList
       data={mediaArray}

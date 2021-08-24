@@ -1,27 +1,24 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import {
-  Text,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import React from 'react';
+import PropTypes from 'prop-types';
+import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
+import {uploadsUrl} from '../utils/variables';
 
 const ListItem = ({singleMedia}) => {
   return (
     <TouchableOpacity style={styles.box}>
       <Image
         style={{width: '100%', height: 'auto', flex: 1}}
-        source={{uri: singleMedia.thumbnails.w160}}
+        source={{
+          uri: uploadsUrl + singleMedia.filename,
+        }}
       />
       <View style={styles.text}>
         <Text style={styles.title}>{singleMedia.title}</Text>
         <Text>{singleMedia.description}</Text>
       </View>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   box: {
@@ -32,18 +29,16 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
-    marginLeft:10,
+    marginLeft: 10,
   },
   title: {
-    fontWeight: "bold",
-    fontSize:20,
+    fontWeight: 'bold',
+    fontSize: 20,
   },
 });
 
 ListItem.propTypes = {
   singleMedia: PropTypes.object.isRequired,
-}
+};
 
-export default ListItem
-
-
+export default ListItem;
