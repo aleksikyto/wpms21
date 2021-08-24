@@ -5,6 +5,7 @@ const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
 
   useEffect(() => {
+    // https://scriptverse.academy/tutorials/js-self-invoking-functions.html
     (async () => {
       setMediaArray(await loadMedia());
     })();
@@ -17,9 +18,9 @@ const useMedia = () => {
       const kaikkiTiedot = mediaIlmanThumbnailia.map(async (media) => {
         return await loadSingleMedia(media.file_id);
       });
-      setMediaArray(await Promise.all(kaikkiTiedot));
+      return Promise.all(kaikkiTiedot);
     } catch (e) {
-      console.log(e.message);
+      console.log(e.message());
     }
   };
 
@@ -29,7 +30,7 @@ const useMedia = () => {
     return tiedosto;
   };
 
-  return {mediaArray, loadSingleMedia};
+  return {mediaArray, loadMedia, loadSingleMedia};
 };
 
 export {useMedia};
