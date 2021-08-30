@@ -6,17 +6,17 @@ import {
   StyleSheet,
   View,
   Text,
-  StatusBar,
 } from 'react-native';
 import {useMedia} from '../hooks/ApiHooks';
 import ListItem from './ListItem';
 import {Settings} from 'react-native-feather';
+import PropTypes from 'prop-types';
 
 const image = {
   uri: 'https://cdn.pixabay.com/photo/2015/10/12/15/01/cat-984097_960_720.jpg',
 };
 
-const List = (props) => {
+const List = ({navigation}) => {
   const {mediaArray} = useMedia();
   console.log('List mediaArray', mediaArray);
   return (
@@ -28,7 +28,6 @@ const List = (props) => {
           style={styles.image}
           imageStyle={styles.imageStyles}
         ></ImageBackground>
-
         <View style={styles.settingsBox}>
           <Settings stroke="white" width={32} height={32} />
         </View>
@@ -39,7 +38,9 @@ const List = (props) => {
       <FlatList
         style={styles.bottomBox}
         data={mediaArray}
-        renderItem={({item}) => <ListItem singleMedia={item} />}
+        renderItem={({item}) => (
+          <ListItem navigation={navigation} singleMedia={item} />
+        )}
         keyExtractor={(item, index) => index.toString()}
       />
     </SafeAreaView>
@@ -91,5 +92,9 @@ const styles = StyleSheet.create({
     flex: 3,
   },
 });
+
+List.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};
 
 export default List;
