@@ -6,9 +6,9 @@ import {uploadsUrl} from '../utils/variables';
 const ListItem = ({singleMedia}) => {
   return (
     <TouchableOpacity style={styles.box}>
-      <View style={{flex: 1}}>
+      <View style={styles.imageBox}>
         <Image
-          style={{flex: 1}}
+          style={styles.images}
           source={{
             uri: uploadsUrl + singleMedia.thumbnails?.w160,
           }}
@@ -16,7 +16,7 @@ const ListItem = ({singleMedia}) => {
       </View>
       <View style={styles.text}>
         <Text style={styles.title}>{singleMedia.title}</Text>
-        <Text>{singleMedia.description}</Text>
+        <Text style={styles.desc}>{singleMedia.description}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -25,9 +25,17 @@ const ListItem = ({singleMedia}) => {
 const styles = StyleSheet.create({
   box: {
     padding: 20,
-    backgroundColor: 'lightblue',
+    backgroundColor: '#2E2F2F',
     flexDirection: 'row',
     marginTop: 10,
+  },
+  imageBox: {
+    flex: 1,
+    minHeight: 100,
+  },
+  images: {
+    flex: 1,
+    borderBottomLeftRadius: 50,
   },
   text: {
     flex: 1,
@@ -36,6 +44,10 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: 20,
+    color: 'white',
+  },
+  desc: {
+    color: 'white',
   },
 });
 
