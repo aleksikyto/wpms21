@@ -5,28 +5,12 @@ import {useContext, useEffect} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useLogin, useUser} from '../hooks/ApiHooks';
+import RegisterForm from '../components/RegisterForm';
+import LoginForm from '../components/LoginForm';
 
 const Login = ({navigation}) => {
   const {setIsLoggedIn} = useContext(MainContext);
-  const {login} = useLogin();
   const {checkToken} = useUser();
-
-  const doLogin = async () => {
-    try {
-      const loginInfo = await login(
-        JSON.stringify({
-          username: 'alesikyto',
-          password: '1234',
-        })
-      );
-      console.log('dologin response', loginInfo);
-      await AsyncStorage.setItem('userToken', loginInfo.token);
-      // TODO : Save user info(loginInfo.user) to maincontext
-      setIsLoggedIn(true);
-    } catch (error) {
-      console.log('doLogin error', error.message);
-    }
-  };
 
   const getToken = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
@@ -46,7 +30,8 @@ const Login = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Text>Login</Text>
-      <Button title="Sign in!" onPress={doLogin} />
+      <LoginForm navigation={navigation} />
+      <RegisterForm navigation={navigation} />
     </View>
   );
 };

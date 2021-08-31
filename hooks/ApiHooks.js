@@ -70,6 +70,9 @@ const useUser = () => {
     } catch (error) {
       console.log('useUser error', error.message);
     }
+    const register = async (token) => {
+      // https://media.mw.metropolia.fi/wbma/docs/#api-User-PostUser
+    };
   };
   return {checkToken};
 };
