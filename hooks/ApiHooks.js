@@ -41,4 +41,37 @@ const useMedia = () => {
   return {mediaArray, loadMedia, loadSingleMedia};
 };
 
-export {useMedia};
+const useLogin = () => {
+  const login = async (userCredentials) => {
+    const requestOptions = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: userCredentials,
+    };
+    try {
+      const loginResponse = await doFetch(baseUrl + 'login', requestOptions);
+      return loginResponse;
+    } catch (error) {
+      console.log('login error', error.message);
+    }
+  };
+  return {login};
+};
+
+const useUser = () => {
+  const checkToken = async (token) => {
+    const options = {
+      method: 'GET',
+      headers: {'x-access-token': token},
+    };
+    try {
+      const userInfo = doFetch(baseUrl + 'users/user', options);
+      return userInfo;
+    } catch (error) {
+      console.log('useUser error', error.message);
+    }
+  };
+  return {checkToken};
+};
+
+export {useMedia, useLogin, useUser};
