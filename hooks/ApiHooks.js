@@ -6,13 +6,8 @@ const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
 
   useEffect(() => {
-    // https://scriptverse.academy/tutorials/js-self-invoking-functions.html
     (async () => {
-      try {
-        setMediaArray(await loadMedia());
-      } catch (e) {
-        console.log(e.message);
-      }
+      setMediaArray(await loadMedia());
     })();
   }, []);
 
@@ -34,7 +29,7 @@ const useMedia = () => {
       return tiedosto;
     } catch (e) {
       console.log('loadSingleMedia', e.message);
-      throw new Error('loadSingleMedia fail');
+      return {};
     }
   };
 
@@ -68,13 +63,15 @@ const useUser = () => {
       const userInfo = doFetch(baseUrl + 'users/user', options);
       return userInfo;
     } catch (error) {
-      console.log('useUser error', error.message);
+      console.log('checkToken error', error);
     }
-    const register = async (token) => {
-      // https://media.mw.metropolia.fi/wbma/docs/#api-User-PostUser
-    };
   };
-  return {checkToken};
+
+  const register = async (token) => {
+    // https://media.mw.metropolia.fi/wbma/docs/#api-User-PostUser
+  };
+
+  return {checkToken, register};
 };
 
 export {useMedia, useLogin, useUser};
