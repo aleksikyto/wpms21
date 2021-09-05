@@ -3,22 +3,21 @@ import {
   StyleSheet,
   View,
   Text,
-  Button,
   KeyboardAvoidingView,
-  Platform,
   TouchableWithoutFeedback,
+  Platform,
   Keyboard,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {useContext, useEffect} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useLogin, useUser} from '../hooks/ApiHooks';
+import {useUser} from '../hooks/ApiHooks';
 import RegisterForm from '../components/RegisterForm';
 import LoginForm from '../components/LoginForm';
 
 const Login = ({navigation}) => {
-  const {setIsLoggedIn, setUser} = useContext(MainContext);
+  const {setIsLoggedIn} = useContext(MainContext);
   const {checkToken} = useUser();
 
   const getToken = async () => {
