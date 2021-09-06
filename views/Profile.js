@@ -15,10 +15,10 @@ const Profile = ({navigation}) => {
 
   useEffect(() => {
     (async () => {
-      const file = await getFilesByTag('avatar_682');
+      const file = await getFilesByTag('avatar_' + user.user_id);
       setAvatar(uploadsUrl + file[0].filename);
     })();
-  }, []);
+  }, [user]);
 
   console.log('profile', isLoggedIn);
 
