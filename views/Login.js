@@ -2,7 +2,6 @@ import React from 'react';
 import {
   StyleSheet,
   View,
-  Text,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Platform,
@@ -15,9 +14,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
 import RegisterForm from '../components/RegisterForm';
 import LoginForm from '../components/LoginForm';
+import {Text} from 'react-native-elements';
 
 const Login = ({navigation}) => {
-  const {setIsLoggedIn} = useContext(MainContext);
+  const {setIsLoggedIn, setUser} = useContext(MainContext);
   const {checkToken} = useUser();
 
   const getToken = async () => {
@@ -26,7 +26,7 @@ const Login = ({navigation}) => {
     if (userToken) {
       const userInfo = await checkToken(userToken);
       if (userInfo.user_id) {
-        // TODO : save user info to maincontext
+        setUser(userInfo);
         setIsLoggedIn(true);
       }
     }
@@ -42,8 +42,13 @@ const Login = ({navigation}) => {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <Text>Login</Text>
+          <Text h2 style={{textAlign: 'center'}}>
+            Login
+          </Text>
           <LoginForm navigation={navigation} />
+          <Text h2 style={{textAlign: 'center'}}>
+            Register
+          </Text>
           <RegisterForm navigation={navigation} />
         </View>
       </TouchableWithoutFeedback>
@@ -55,8 +60,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  keyboardView: {
+    flex: 1,
   },
 });
 

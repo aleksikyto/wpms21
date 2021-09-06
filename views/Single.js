@@ -1,33 +1,24 @@
 import React from 'react';
-import {StyleSheet, SafeAreaView, Text, Image} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
-import {format} from 'date-fns';
+import {Text, Card, ListItem} from 'react-native-elements';
 
 const Single = ({route}) => {
   const {params} = route;
   return (
-    <SafeAreaView style={styles.container}>
-      <Text>{params.title}</Text>
-      <Image
-        style={{width: 200, height: 200}}
+    <Card>
+      <Card.Image
+        style={{width: 300, height: 300}}
         source={{uri: uploadsUrl + params.filename}}
       />
-      <Text>{params.description}</Text>
-      <Text>{format(new Date(params.time_added), 'dd.MM.yyyy')}</Text>
-    </SafeAreaView>
+      <Card.Divider />
+      <Text h1>{params.title}</Text>
+      <ListItem>
+        <Text>{params.description}</Text>
+      </ListItem>
+    </Card>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 40,
-  },
-});
 
 Single.propTypes = {
   route: PropTypes.object.isRequired,

@@ -88,4 +88,17 @@ const useUser = () => {
   return {checkToken, register};
 };
 
-export {useMedia, useLogin, useUser};
+const useTag = () => {
+  const getFilesByTag = async (tag) => {
+    try {
+      const avatar = await doFetch(baseUrl + 'tags/' + tag);
+      return avatar;
+    } catch (e) {
+      console.log('useTag', e.message);
+      return {};
+    }
+  };
+  return {getFilesByTag};
+};
+
+export {useMedia, useLogin, useUser, useTag};
