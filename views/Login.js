@@ -58,6 +58,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  keyboardView: {
+    flex: 1,
+  },
 });
 
 Login.propTypes = {
