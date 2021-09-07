@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   StyleSheet,
-  View,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Platform,
@@ -14,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
 import RegisterForm from '../components/RegisterForm';
 import LoginForm from '../components/LoginForm';
-import {Text} from 'react-native-elements';
+import {Card, Text} from 'react-native-elements';
 
 const Login = ({navigation}) => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
@@ -41,26 +40,23 @@ const Login = ({navigation}) => {
       style={styles.keyboardView}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
+        <Card>
           <Text h2 style={{textAlign: 'center'}}>
             Login
           </Text>
           <LoginForm navigation={navigation} />
+          <Card.Divider />
           <Text h2 style={{textAlign: 'center'}}>
             Register
           </Text>
           <RegisterForm navigation={navigation} />
-        </View>
+        </Card>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   keyboardView: {
     flex: 1,
   },
