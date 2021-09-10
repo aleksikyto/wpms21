@@ -68,20 +68,24 @@ const useUser = () => {
   };
 
   const register = async (inputs) => {
+    const registerInputs = {
+      username: inputs.username,
+      password: inputs.password,
+      email: inputs.email,
+      full_Name: inputs.full_name,
+    };
     const fetchOptions = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: inputs,
+      body: JSON.stringify(registerInputs),
     };
     try {
-      const response = await fetch(baseUrl + 'users', fetchOptions);
-      const json = await response.json();
-      return json;
-    } catch (e) {
-      console.log('ApiHooks register', e.message);
-      return false;
+      const registerResponse = await doFetch(baseUrl + 'users', fetchOptions);
+      return registerResponse;
+    } catch (error) {
+      console.log('register error', error.message);
     }
   };
 

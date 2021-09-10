@@ -11,12 +11,13 @@ const RegisterForm = ({navigation}) => {
   const {register} = useUser();
 
   const doRegister = async () => {
-    const serverResponse = await register(JSON.stringify(inputs));
-    console.log('registerform - doRegister', serverResponse);
-    if (serverResponse) {
-      Alert.alert(serverResponse.message);
-    } else {
-      Alert.alert('Registration failed.');
+    try {
+      const registerInfo = await register(inputs);
+      if (registerInfo) {
+        Alert.alert(registerInfo.message);
+      }
+    } catch (e) {
+      Alert.alert(e.message);
     }
   };
 
@@ -32,7 +33,7 @@ const RegisterForm = ({navigation}) => {
         }}
         errorMessage={errors.username}
       />
-       <Input
+      <Input
         autoCapitalize="none"
         placeholder="password"
         onChangeText={(txt) => handleInputChange('password', txt)}

@@ -13,8 +13,8 @@ const constraints = {
   password: {
     presence: true,
     length: {
-      minimum: 6,
-      message: 'must be at least 6 characters',
+      minimum: 5,
+      message: 'must be at least 5 characters',
     },
   },
   confirmPassword: {
