@@ -9,29 +9,35 @@ import Login from '../views/Login';
 import {MainContext} from '../contexts/MainContext';
 import {useContext} from 'react';
 import {Icon} from 'react-native-elements';
+import Upload from '../views/Upload';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const TabScreen = () => {
   return (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          tabBarLabel: 'Home',
-          tabBarIcon: () => <Icon name="home" color="white" size={26} />,
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          tabBarLabel: 'Profile',
-          tabBarIcon: () => <Icon name="person" color="white" size={26} />,
-        }}
-      />
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        tabBarIcon: ({color, size}) => {
+          let iconName = '';
+          switch (route.name) {
+            case 'Home':
+              iconName = 'home';
+              break;
+            case 'Profile':
+              iconName = 'account-box';
+              break;
+            case 'Upload':
+              iconName = 'cloud-upload';
+              break;
+          }
+          return <Icon name={iconName} size={size} color={color} />;
+        },
+      })}
+    >
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Upload" component={Upload} />
     </Tab.Navigator>
   );
 };
@@ -42,7 +48,13 @@ const StackScreen = () => {
     <Stack.Navigator>
       {isLoggedIn ? (
         <>
-          <Stack.Screen name="Home" component={TabScreen} />
+          <Stack.Screen
+            name="Front"
+            component={TabScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
           <Stack.Screen name="Single" component={Single} />
         </>
       ) : (

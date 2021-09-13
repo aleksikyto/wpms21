@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {doFetch} from '../utils/http';
 import {baseUrl} from '../utils/variables';
+import axios from 'axios';
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
@@ -33,7 +34,22 @@ const useMedia = () => {
     }
   };
 
-  return {mediaArray, loadMedia, loadSingleMedia};
+  const uploadMedia = async (formData, token) => {
+    const options = {
+      method: 'POST',
+      headers: {'x-access-token': token},
+      data: formData,
+    };
+    try {
+      const result = await axios(baseUrl + 'media/', options);
+      console.log('axios', result);
+    } catch (e) {
+      console.log('axios', e.message);
+      return {};
+    }
+  };
+
+  return {mediaArray, loadMedia, loadSingleMedia, uploadMedia};
 };
 
 const useLogin = () => {

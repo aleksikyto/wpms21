@@ -3,11 +3,11 @@ import {useContext} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Card, Text, Button, Image, ListItem, Avatar} from 'react-native-elements';
+import {Card, Text, ListItem, Avatar} from 'react-native-elements';
 import {useTag} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
-import { ActivityIndicator } from 'react-native-paper';
-import { StyleSheet } from 'react-native';
+import {ActivityIndicator} from 'react-native-paper';
+import {StyleSheet} from 'react-native';
 
 const Profile = ({navigation}) => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(MainContext);
@@ -18,7 +18,7 @@ const Profile = ({navigation}) => {
   useEffect(() => {
     (async () => {
       const file = await getFilesByTag('avatar_' + user.user_id);
-      setAvatar(uploadsUrl + file[0].filename);
+      setAvatar(uploadsUrl + file.pop().filename);
     })();
   }, [user]);
 
