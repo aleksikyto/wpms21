@@ -1,30 +1,35 @@
-import React, {useState} from 'react';
+/* eslint-disable no-undef */
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, KeyboardAvoidingView, Platform} from 'react-native';
 import PropTypes from 'prop-types';
-import {useContext, useEffect} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
 import RegisterForm from '../components/RegisterForm';
 import LoginForm from '../components/LoginForm';
-import {Card, Text} from 'react-native-elements';
+import {Card, ListItem, Text} from 'react-native-elements';
 
 const Login = ({navigation}) => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
   const {checkToken} = useUser();
-  const [registerFormToggle, setRegisterFormToggle] = useState();
+  const [registerFormToggle, setRegisterFormToggle] = useState(false);
 
   const getToken = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
-    console.log('token', userToken);
+    console.log('logIn asyncstorage token:', userToken);
     if (userToken) {
-      const userInfo = await checkToken(userToken);
-      if (userInfo.user_id) {
-        setUser(userInfo);
-        setIsLoggedIn(true);
+      try {
+        const userInfo = await checkToken(userToken);
+        if (userInfo.user_id) {
+          setUser(userInfo);
+          setIsLoggedIn(true);
+        }
+      } catch (e) {
+        console.log('getToken', e.message);
       }
     }
   };
+
   useEffect(() => {
     getToken();
   }, []);
@@ -32,40 +37,48 @@ const Login = ({navigation}) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.keyboardView}
+      style={styles.container}
     >
       {registerFormToggle ? (
         <Card>
-          <Text h2 style={{textAlign: 'center'}}>
-            Register
-          </Text>
+          <Card.Divider />
+          <Card.Title h4>Register</Card.Title>
           <RegisterForm navigation={navigation} />
         </Card>
       ) : (
         <Card>
-          <Text h2 style={{textAlign: 'center'}}>
-            Login
-          </Text>
+          <Card.Title h4>Login</Card.Title>
           <LoginForm navigation={navigation} />
         </Card>
       )}
-      <Text
-        style={{textAlign: 'center', color: 'blue', marginTop: 20}}
+      {/* TODO: add link/button & event handler to change state: setRegformtoggle(!regformtoggle);  */}
+      <ListItem
         onPress={() => {
           setRegisterFormToggle(!registerFormToggle);
         }}
       >
-        {registerFormToggle
-          ? 'Already registered? Login.'
-          : 'Not registered yet?  \nCreate new account'}
-      </Text>
+        <ListItem.Content>
+          <Text style={styles.text}>
+            {registerFormToggle
+              ? 'Already registered? Login here'
+              : 'No account? Register here.'}
+          </Text>
+        </ListItem.Content>
+        <ListItem.Chevron />
+      </ListItem>
     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  keyboardView: {
+  container: {
     flex: 1,
+    backgroundColor: '#fff',
+  },
+  image: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
   },
 });
 

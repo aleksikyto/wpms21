@@ -13,8 +13,8 @@ const constraints = {
   password: {
     presence: true,
     length: {
-      minimum: 5,
-      message: 'must be at least 5 characters',
+      minimum: 6,
+      message: 'must be at least 6 characters',
     },
   },
   confirmPassword: {
@@ -45,10 +45,10 @@ const useSignUpForm = (callback) => {
     email: '',
     full_name: '',
   });
-
   const [errors, setErrors] = useState({});
 
   const handleInputChange = (name, text) => {
+    console.log(name, text);
     setInputs((inputs) => {
       return {
         ...inputs,
@@ -79,11 +79,14 @@ const useSignUpForm = (callback) => {
   };
 
   const checkUsername = async (username) => {
+    // TODO: add check username functionality to API hooks and use it
     if (username.length < 3) {
       return;
     }
     try {
+      // add error to Input element if username is reserved
       const isAvailable = await checkUsernameAvailable(username);
+      console.log('checkUsername available', isAvailable);
       if (!isAvailable) {
         setErrors((errors) => {
           return {...errors, username: 'Username already exists'};
@@ -96,10 +99,10 @@ const useSignUpForm = (callback) => {
 
   return {
     handleInputChange,
+    handleOnEndEditing,
     inputs,
     errors,
     checkUsername,
-    handleOnEndEditing,
   };
 };
 

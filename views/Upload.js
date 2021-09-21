@@ -1,27 +1,70 @@
-import React, {useEffect, useState} from 'react';
+/* eslint-disable no-undef */
+import React, {useState, useEffect, useContext} from 'react';
 import PropTypes from 'prop-types';
-import {Platform, View} from 'react-native';
+import {View, Platform, Alert} from 'react-native';
 import UploadForm from '../components/UploadForm';
-import {Image, Button} from 'react-native-elements';
+import {Button, Image} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 import * as ImagePicker from 'expo-image-picker';
-import {useMedia} from '../hooks/ApiHooks';
+import {useMedia, useTag} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {appID} from '../utils/variables';
+import {MainContext} from '../contexts/MainContext';
 
-const Upload = (props) => {
-  const {inputs, handleInputChange} = useUploadForm();
+const Upload = ({navigation}) => {
   const [image, setImage] = useState(require('../assets/icon.png'));
-  const [type, setType] = useState('');
-  const {uploadMedia} = useMedia();
+  const [filetype, setFiletype] = useState('');
+  const {inputs, handleInputChange, setInputs} = useUploadForm();
+  const {uploadMedia, loading} = useMedia();
+  const {addTag} = useTag();
+  const {update, setUpdate} = useContext(MainContext);
+
+  const resetForm = () => {
+    setInputs({
+      title: '',
+      description: '',
+    });
+    setImage(require('../assets/icon.png'));
+  };
 
   const doUpload = async () => {
     const filename = image.uri.split('/').pop();
+    // Infer the type of the image
+    const match = /\.(\w+)$/.exec(filename);
+    let type = match ? `${filetype}/${match[1]}` : filetype;
+    if (type === 'image/jpg') type = 'image/jpeg';
+    console.log('doUpload mimetype:', type);
     const formData = new FormData();
     formData.append('file', {uri: image.uri, name: filename, type});
     formData.append('title', inputs.title);
     formData.append('description', inputs.description);
-    const userToken = await AsyncStorage.getItem('userToken');
-    uploadMedia(formData, userToken);
+    // console.log('doUpload', formData);
+    try {
+      const userToken = await AsyncStorage.getItem('userToken');
+      const result = await uploadMedia(formData, userToken);
+      // console.log('doUpload', result);
+      const tagResult = await addTag(result.file_id, appID, userToken);
+      // console.log('doUpload addTag', tagResult);
+      if (tagResult.message) {
+        Alert.alert(
+          'Upload',
+          result.message,
+          [
+            {
+              text: 'Ok',
+              onPress: () => {
+                setUpdate(update + 1);
+                resetForm();
+                navigation.navigate('Home');
+              },
+            },
+          ],
+          {cancelable: false}
+        );
+      }
+    } catch (e) {
+      console.log('doUpload error', e.message);
+    }
   };
 
   useEffect(() => {
@@ -48,7 +91,7 @@ const Upload = (props) => {
 
     if (!result.cancelled) {
       setImage({uri: result.uri});
-      setType(result.type);
+      setFiletype(result.type);
     }
   };
 
@@ -60,11 +103,16 @@ const Upload = (props) => {
         title="Upload"
         handleSubmit={doUpload}
         handleInputChange={handleInputChange}
-      ></UploadForm>
+        loading={loading}
+        inputs={inputs}
+      />
+      <Button title="Reset form" onPress={resetForm} />
     </View>
   );
 };
 
-Upload.propTypes = {};
+Upload.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};
 
 export default Upload;
